@@ -1,0 +1,623 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CyberDesk-Präsentation</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap">
+<!-- Eigenständige Datei zum lokalen Öffnen (Doppelklick) — keine Internetverbindung
+     nötig außer für die Google-Fonts-Zeile oben; ohne Internet greifen die
+     definierten Fallback-Schriften, das Layout bleibt funktionsfähig. -->
+<style>
+  :root{
+    --bg: #06060f;
+    --bg2: #0a0a16;
+    --panel: rgba(15,14,26,0.78);
+    --panel-solid: #0d0d1a;
+    --ink: #f1eefb;
+    --ink-dim: #a9a3c4;
+    --ink-faint: #706a91;
+    --border: rgba(139,92,246,0.22);
+    --border-strong: rgba(167,139,250,0.5);
+    --accent: #7c3aed;
+    --accent-2: #8b5cf6;
+    --accent-3: #a78bfa;
+    --ok: #34d3a5;
+    --warn: #e0a944;
+    --miss: #f26a90;
+  }
+
+  *{ box-sizing: border-box; }
+  html, body{ height: 100%; }
+  body{
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+  ::selection{ background: rgba(124,58,237,0.4); color: #fff; }
+
+  .display{ font-family: "Unbounded", "JetBrains Mono", sans-serif; }
+
+  /* ---------- Hintergrund: Grid + Glow, wie im echten Desktop ---------- */
+  .bg-fx{
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background:
+      radial-gradient(ellipse 900px 600px at 15% 12%, rgba(124,58,237,0.16), transparent 60%),
+      radial-gradient(ellipse 700px 500px at 88% 85%, rgba(139,92,246,0.12), transparent 60%),
+      linear-gradient(var(--bg), var(--bg2));
+  }
+  .bg-fx::after{
+    content:"";
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
+    background-size: 42px 42px;
+    mask-image: radial-gradient(ellipse 90% 80% at 50% 40%, black 40%, transparent 85%);
+  }
+
+  /* ---------- Deck-Gerüst ---------- */
+  .deck{ position: relative; z-index: 1; height: 100vh; width: 100vw; }
+  .slide{
+    position: absolute; inset: 0;
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 6vh 7vw;
+    opacity: 0;
+    transition: opacity .35s ease;
+  }
+  .slide.active{ display: flex; opacity: 1; }
+  @media (prefers-reduced-motion: reduce){ .slide{ transition: none; } }
+
+  .slide-inner{ width: 100%; max-width: 1120px; max-height: 86vh; overflow-y: auto; padding-right: 4px; }
+  /* dezenter Scrollbar-Look statt OS-Standard, falls Inhalt auf kleinen Bildschirmen doch überläuft */
+  .slide-inner::-webkit-scrollbar{ width: 6px; }
+  .slide-inner::-webkit-scrollbar-thumb{ background: var(--border-strong); border-radius: 3px; }
+
+  .eyebrow{
+    font-size: 12.5px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--accent-3);
+    font-weight: 600;
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 18px;
+  }
+  .eyebrow .dot{
+    width: 7px; height: 7px; border-radius: 50%; background: var(--accent-3);
+    box-shadow: 0 0 12px 2px rgba(167,139,250,0.6);
+  }
+
+  h1{
+    font-family: "Unbounded", sans-serif;
+    font-weight: 900;
+    font-size: clamp(36px, 6vw, 76px);
+    line-height: 1.02;
+    margin: 0 0 20px;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+  h2{
+    font-family: "Unbounded", sans-serif;
+    font-weight: 700;
+    font-size: clamp(26px, 3.4vw, 42px);
+    line-height: 1.1;
+    margin: 0 0 22px;
+    text-wrap: balance;
+  }
+  .lede{
+    font-size: clamp(15px, 1.5vw, 19px);
+    color: var(--ink-dim);
+    line-height: 1.6;
+    max-width: 70ch;
+  }
+
+  /* ---------- Titelfolie ---------- */
+  .title-slide h1{ font-size: clamp(48px, 9vw, 108px); }
+  .title-logo{
+    display: inline-flex; align-items: center; gap: 16px;
+    margin-bottom: 28px;
+  }
+  .title-glyph{
+    width: 46px; height: 46px; border-radius: 12px;
+    background: linear-gradient(145deg, var(--accent-2), var(--accent));
+    box-shadow: 0 0 40px 6px rgba(124,58,237,0.5);
+  }
+  .title-sub{
+    font-size: clamp(14px, 1.6vw, 18px);
+    color: var(--ink-dim);
+    letter-spacing: 0.02em;
+    margin-top: 8px;
+  }
+  .title-meta{
+    margin-top: 46px;
+    display: flex; gap: 28px; flex-wrap: wrap;
+    font-size: 12.5px; color: var(--ink-faint); letter-spacing: 0.03em;
+  }
+
+  /* ---------- Listen / Bullets ---------- */
+  .goals{ list-style: none; padding: 0; margin: 30px 0 0; display: grid; gap: 14px; max-width: 640px; }
+  .goals li{
+    display: flex; gap: 14px; align-items: baseline;
+    font-size: 16.5px; color: var(--ink);
+  }
+  .goals li::before{
+    content: "";
+    width: 8px; height: 8px; border-radius: 2px; flex: none;
+    background: var(--accent-3); margin-top: 6px;
+    transform: rotate(45deg);
+  }
+  .goals b{ color: var(--accent-3); }
+
+  /* ---------- Architektur-Flussdiagramm (reines CSS, keine externe Bibliothek) ---------- */
+  .diagram-wrap{
+    margin-top: 24px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 26px 28px;
+    width: 100%;
+  }
+  .flow-row{ display: flex; align-items: center; flex-wrap: wrap; gap: 10px; }
+  .flow-node{
+    display: flex; flex-direction: column; gap: 3px;
+    background: var(--panel-solid);
+    border: 1px solid var(--border-strong);
+    border-radius: 10px;
+    padding: 10px 14px;
+    min-width: 118px;
+  }
+  .flow-node b{ font-family: "Unbounded", sans-serif; font-size: 11.5px; color: var(--ink); }
+  .flow-node span{ font-size: 10px; color: var(--ink-faint); }
+  .flow-node.hub{ border-color: var(--accent-3); box-shadow: 0 0 0 1px rgba(167,139,250,0.25), 0 0 18px rgba(124,58,237,0.35); }
+  .flow-node.hub b{ color: var(--accent-3); }
+  .flow-arrow{
+    display: flex; flex-direction: column; align-items: center; gap: 2px;
+    font-size: 9.5px; color: var(--ink-faint); white-space: nowrap;
+    letter-spacing: 0.02em;
+  }
+  .flow-arrow i{ font-style: normal; color: var(--accent-3); font-size: 15px; line-height: 1; }
+  @media (max-width: 900px){
+    .flow-row{ flex-direction: column; align-items: stretch; }
+    .flow-arrow{ flex-direction: row; justify-content: center; }
+  }
+
+  /* ---------- Karten-Grids ---------- */
+  .grid{ display: grid; gap: 16px; margin-top: 28px; width: 100%; }
+  .grid.cols-2{ grid-template-columns: repeat(2, 1fr); }
+  .grid.cols-3{ grid-template-columns: repeat(3, 1fr); }
+  .grid.cols-5{ grid-template-columns: repeat(5, 1fr); }
+
+  .card{
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px 20px;
+  }
+  .card h3{
+    font-family: "Unbounded", sans-serif;
+    font-size: 15px; font-weight: 700; margin: 0 0 8px; color: var(--ink);
+  }
+  .card p{ font-size: 12.8px; color: var(--ink-dim); line-height: 1.55; margin: 0; }
+
+  .app-card{ text-align: left; }
+  .app-icon{
+    width: 40px; height: 40px; margin-bottom: 12px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 10px;
+    background: rgba(124,58,237,0.14);
+    border: 1px solid var(--border);
+  }
+  .app-icon svg{ width: 22px; height: 22px; }
+  .app-card .status{
+    display: inline-block; margin-top: 10px;
+    font-size: 10.5px; font-weight: 700; letter-spacing: 0.04em;
+    padding: 2px 8px; border-radius: 999px;
+  }
+  .status.ok{ background: rgba(52,211,165,0.14); color: var(--ok); }
+  .status.warn{ background: rgba(224,169,68,0.14); color: var(--warn); }
+  .status.miss{ background: rgba(242,106,144,0.14); color: var(--miss); }
+
+  /* ---------- Demo-Checkliste ---------- */
+  .demo-list{ list-style: none; counter-reset: d; padding: 0; margin: 22px 0 0; display: grid; gap: 8px; width: 100%; }
+  .demo-list li{
+    counter-increment: d;
+    display: grid; grid-template-columns: 30px 1fr; gap: 14px; align-items: center;
+    background: var(--panel); border: 1px solid var(--border); border-radius: 10px;
+    padding: 9px 16px;
+    font-size: 13.5px;
+  }
+  /* Eigener Wrapper um Haupttext + <small>, damit beide EIN Grid-Item bilden —
+     sonst zählt der ::before-Kreis als eigenes Grid-Item und der Text bricht
+     in die schmale erste Spalte um (Wort-für-Wort-Umbruch-Bug). */
+  .demo-list li > span{ display: block; min-width: 0; }
+  .demo-list li::before{
+    content: counter(d);
+    font-family: "Unbounded", sans-serif; font-weight: 700; font-size: 12px;
+    color: #fff; background: var(--accent);
+    width: 26px; height: 26px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .demo-list small{ display: block; color: var(--ink-faint); margin-top: 1px; font-size: 11px; }
+
+  /* ---------- Abweichungs-Karten ---------- */
+  .dev-card{ border-left: 3px solid var(--accent-3); }
+  .dev-card .from-to{ font-size: 12px; color: var(--ink-faint); margin-bottom: 6px; }
+  .dev-card .from-to s{ opacity: 0.6; }
+  .dev-card .from-to b{ color: var(--accent-3); font-weight: 600; }
+
+  /* ---------- Status-Spalten ---------- */
+  .status-cols{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 20px; width: 100%; }
+  .status-col{ border-radius: 16px; padding: 16px 18px; border: 1px solid var(--border); background: var(--panel); }
+  .status-col h3{
+    font-family: "Unbounded", sans-serif; font-size: 13px; font-weight: 700;
+    letter-spacing: 0.03em; text-transform: uppercase; margin: 0 0 12px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .status-col h3::before{ content: ""; width: 9px; height: 9px; border-radius: 50%; flex: none; }
+  .status-col.ok h3{ color: var(--ok); } .status-col.ok h3::before{ background: var(--ok); }
+  .status-col.warn h3{ color: var(--warn); } .status-col.warn h3::before{ background: var(--warn); }
+  .status-col.miss h3{ color: var(--miss); } .status-col.miss h3::before{ background: var(--miss); }
+  .status-col ul{ list-style: none; padding: 0; margin: 0; display: grid; gap: 7px; }
+  .status-col li{ font-size: 12.2px; color: var(--ink-dim); line-height: 1.35; }
+  .status-col li b{ color: var(--ink); font-weight: 600; }
+
+  /* ---------- Roadmap ---------- */
+  .roadmap{ display: grid; gap: 12px; margin-top: 26px; width: 100%; }
+  .roadmap li{
+    list-style: none;
+    display: grid; grid-template-columns: 130px 1fr; gap: 18px; align-items: baseline;
+    padding: 12px 0; border-bottom: 1px dashed var(--border);
+    font-size: 14px;
+  }
+  .roadmap li b{ color: var(--accent-3); font-family: "Unbounded", sans-serif; font-size: 12px; letter-spacing: 0.03em; }
+  .roadmap span{ color: var(--ink-dim); }
+
+  /* ---------- Danke-Folie ---------- */
+
+  /* ---------- Navigation ---------- */
+  .nav{
+    position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%);
+    z-index: 5;
+    display: flex; align-items: center; gap: 14px;
+    background: rgba(13,13,26,0.85);
+    border: 1px solid var(--border);
+    padding: 8px 14px;
+    border-radius: 999px;
+    backdrop-filter: blur(6px);
+  }
+  .nav button{
+    background: transparent; border: none; color: var(--ink-dim);
+    cursor: pointer; font-family: "JetBrains Mono", monospace; font-size: 13px;
+    padding: 4px 8px; border-radius: 6px; display: flex; align-items: center;
+  }
+  .nav button:hover{ color: #fff; background: rgba(255,255,255,0.06); }
+  .nav button:focus-visible{ outline: 2px solid var(--accent-3); outline-offset: 2px; }
+  .dots{ display: flex; gap: 6px; }
+  .dots span{
+    width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.18);
+    transition: background .2s, transform .2s;
+  }
+  .dots span.on{ background: var(--accent-3); transform: scale(1.3); }
+  .counter{ font-size: 11.5px; color: var(--ink-faint); min-width: 44px; text-align: center; }
+
+  .slide-tag{
+    position: fixed; top: 22px; right: 26px; z-index: 5;
+    font-size: 11px; letter-spacing: 0.08em; color: var(--ink-faint);
+    text-transform: uppercase;
+  }
+
+  @media (max-width: 1100px){
+    .grid.cols-5{ grid-template-columns: repeat(3, 1fr); }
+  }
+  @media (max-width: 760px){
+    .grid.cols-2, .grid.cols-3, .grid.cols-5, .status-cols{ grid-template-columns: 1fr; }
+    .roadmap li{ grid-template-columns: 1fr; gap: 4px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-fx"></div>
+<div class="slide-tag">CyberDesk OS · Präsentation</div>
+
+<div class="deck" id="deck">
+
+  <!-- 0: TITEL -->
+  <section class="slide title-slide active" data-title="Start">
+    <div class="slide-inner">
+      <div class="title-logo">
+        <div class="title-glyph"></div>
+      </div>
+      <h1>CYBERDESK<br>OS</h1>
+      <p class="title-sub">Eine Cyberpunk-Desktop-Simulation in PySide6 — Kursprojekt GUI-Weiterbildung</p>
+      <div class="title-meta">
+        <span>Handbuch: <code>CyberDesk_Projekt-Handbuch.pdf</code></span>
+        <span>Stand: 29.08.2026</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 1: PYSIDE6 -->
+  <section class="slide" data-title="PySide6">
+    <div class="slide-inner">
+      <div class="eyebrow"><span class="dot"></span>Das Werkzeug dahinter</div>
+      <h2>PySide6 — die Python-Anbindung an Qt6</h2>
+      <p class="lede">PySide6 ist die offizielle Python-Anbindung („Bindings“) an das C++-Framework
+      Qt6 — bekannt als <b style="color:var(--accent-3)">Qt for Python</b>. Damit lassen sich
+      plattformunabhängige Desktop-Anwendungen mit grafischer Oberfläche komplett in Python
+      entwickeln, ohne eine Zeile C++ zu schreiben.</p>
+      <div class="grid cols-2" style="margin-top:22px;">
+        <div class="card">
+          <h3>Offizieller Status</h3>
+          <p>Wird direkt von The Qt Company entwickelt und gepflegt — kein Community-Fork.</p>
+        </div>
+        <div class="card">
+          <h3>Lizenz: LGPLv3</h3>
+          <p>Kostenlose Nutzung auch in kommerziellen Projekten, ohne den eigenen Quellcode offenlegen zu müssen.</p>
+        </div>
+        <div class="card">
+          <h3>Kernmodule</h3>
+          <p><code>QtWidgets</code> (Buttons, Fenster), <code>QtGui</code> (Grafik, Schriften, Bilder),
+          <code>QtCore</code> (Signals &amp; Slots, Threads, Dateien).</p>
+        </div>
+        <div class="card">
+          <h3>Mitgelieferte Werkzeuge</h3>
+          <p><code>pyside6-designer</code> (visueller UI-Editor), <code>pyside6-uic</code>
+          (wandelt Designs in Python-Code um).</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2: VISION -->
+  <section class="slide" data-title="Vision">
+    <div class="slide-inner">
+      <div class="eyebrow"><span class="dot"></span>Worum geht es</div>
+      <h2>Kein Betriebssystem. Eine Simulation eines Desktops.</h2>
+      <p class="lede">Login, ein Desktop mit beweglichen Icons, ein echtes Fenstersystem, eine Taskbar mit
+      Startmenü — und mehrere Apps, die jeweils in ihrem eigenen Fenster laufen. Alles eingebettet
+      in eine durchgängige Neon-Ästhetik.</p>
+      <ul class="goals">
+        <li><b>Funktional</b> — echtes Fenstersystem, mehrere Apps parallel offen</li>
+        <li><b>Atmosphärisch</b> — Cyberpunk-Look per zentralem Qt-Stylesheet</li>
+        <li><b>Erweiterbar</b> — neue Apps über eine gemeinsame Basisklasse</li>
+        <li><b>Ehrlich</b> — was nicht fertig wurde, steht offen in dieser Präsentation</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 3: ARCHITEKTUR / HERZ -->
+  <section class="slide" data-title="Architektur">
+    <div class="slide-inner">
+      <div class="eyebrow"><span class="dot"></span>Das Herz der App</div>
+      <h2>Kein Modul kennt ein anderes direkt</h2>
+      <p class="lede">Alles läuft über einen globalen <b style="color:var(--accent-3)">EventBus</b>
+      (Publish/Subscribe). Ein Klick auf ein Desktop-Icon publiziert <code>app.launch</code> —
+      die <b style="color:var(--accent-3)">AppRegistry</b> reagiert, egal welche App das ist.</p>
+      <div class="diagram-wrap">
+        <div class="flow-row">
+          <div class="flow-node"><b>Desktop-Icon</b><span>Klick</span></div>
+          <div class="flow-arrow">app.launch<i>→</i></div>
+          <div class="flow-node hub"><b>EventBus</b><span>Publish/Subscribe</span></div>
+          <div class="flow-arrow">app.launch<i>→</i></div>
+          <div class="flow-node"><b>AppRegistry</b><span>findet App automatisch</span></div>
+          <div class="flow-arrow">öffnet<i>→</i></div>
+          <div class="flow-node"><b>WindowManager</b><span>Fokus · Z-Order · Minimieren</span></div>
+        </div>
+        <div class="flow-row" style="margin-top:14px;">
+          <div class="flow-node"><b>WindowManager</b><span>Fenster ist offen</span></div>
+          <div class="flow-arrow">window.opened<i>→</i></div>
+          <div class="flow-node hub"><b>EventBus</b><span>Publish/Subscribe</span></div>
+          <div class="flow-arrow">window.opened<i>→</i></div>
+          <div class="flow-node"><b>Taskbar</b><span>zeigt laufende Apps</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4: CUSTOM WINDOWS -->
+  <section class="slide" data-title="Eigene Fenster">
+    <div class="slide-inner">
+      <div class="eyebrow"><span class="dot"></span>Design-Entscheidung</div>
+      <h2>Das Fensterverhalten ist komplett selbst gebaut</h2>
+      <p class="lede">PySide6 liefert das Fenster — aber sobald man mit
+      <code>Qt.FramelessWindowHint</code> die native Windows-Dekoration abschaltet,
+      verschwindet auch das komplette Fensterverhalten mit: Verschieben, Rand-Resize,
+      Minimieren/Maximieren/Schließen. Genau das ist in <code>apps/base_app.py</code>
+      selbst nachgebaut, um exakt der Figma-Vorlage zu entsprechen.</p>
+      <div class="grid cols-3" style="margin-top:22px;">
+        <div class="card">
+          <h3>Eigene Titelleiste</h3>
+          <p>App-Icon, Minimieren/Maximieren/Schließen als eigene, gestylte Buttons statt OS-Standard.</p>
+        </div>
+        <div class="card">
+          <h3>Eigener Rand-Resize</h3>
+          <p>Fenstergröße per Maus an der Kante ändern — selbst implementiert, kein natives Verhalten.</p>
+        </div>
+        <div class="card">
+          <h3>Ein Preis dafür</h3>
+          <p>Kein OS-Snapping, kein natives Alt+Tab-Icon — bewusst in Kauf genommen für den Look.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5: APPS -->
+  <section class="slide" data-title="Apps">
+    <div class="slide-inner">
+      <div class="eyebrow"><span class="dot"></span>Was tatsächlich läuft</div>
+      <h2>5 Apps, jede in ihrem eigenen Fenster</h2>
+      <div class="grid cols-5" id="app-grid"></div>
+    </div>
+  </section>
+
+  <!-- 6: ABWEICHUNGEN -->
+  <section class="slide" data-title="Abweichungen">
+    <div class="slide-inner">
+      <div class="eyebrow"><span class="dot"></span>Bewusst anders als im Handbuch</div>
+      <h2>Entschieden, nicht übersehen</h2>
+      <div class="grid cols-2">
+        <div class="card dev-card">
+          <div class="from-to"><s>PyQt6</s> → <b>PySide6</b></div>
+          <p>Funktional äquivalentes Qt6-Binding, unproblematischere Lizenz (LGPL).</p>
+        </div>
+        <div class="card dev-card">
+          <div class="from-to"><s>Cyan / Magenta</s> → <b>Violett</b></div>
+          <p>Eigene Figma-Vorlage — dafür konsequent überall umgesetzt.</p>
+        </div>
+        <div class="card dev-card">
+          <div class="from-to"><s>Fake-Lore-Browser</s> → <b>Echter Browser</b></div>
+          <p>NetRunner lädt reale Webseiten (Chromium/QWebEngineView) statt statischer Lore-Seiten.</p>
+        </div>
+        <div class="card dev-card">
+          <div class="from-to">VirtualFS <b>nur für Datei-Explorer</b></div>
+          <p>Notizen bleiben bei eigenem Schema — mehrere benannte Notizen passen nicht auf eine Einzeldatei.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7: STATUS -->
+  <section class="slide" data-title="Status">
+    <div class="slide-inner">
+      <div class="eyebrow"><span class="dot"></span>Ehrlicher Schlussstand</div>
+      <h2>Was fertig ist, was fehlt</h2>
+      <div class="status-cols">
+        <div class="status-col ok">
+          <h3>Fertig</h3>
+          <ul>
+            <li><b>Kernsystem</b> — EventBus, WindowManager, AppRegistry, BaseApp</li>
+            <li><b>5 Apps</b> — Taschenrechner, NetRunner, Notizen, Datei-Explorer, Einstellungen</li>
+            <li><b>Desktop & Taskbar</b> — Wallpaper, Kontextmenü, Startmenü, Minimieren/Wiederherstellen</li>
+            <li><b>13/13 Tests</b> grün, <code>ruff</code> sauber</li>
+          </ul>
+        </div>
+        <div class="status-col warn">
+          <h3>Teilweise</h3>
+          <ul>
+            <li><b>Datei-Explorer</b> — echte Navigation, aber kein Öffnen-in-App, kein Kontextmenü</li>
+            <li><b>Look & Feel</b> — Farben/Glow ja, Scanlines/Sounds nein</li>
+            <li><b>Persistenz</b> — Notizen/Profil ja, Fensterpositionen nein</li>
+          </ul>
+        </div>
+        <div class="status-col miss">
+          <h3>Offen</h3>
+          <ul>
+            <li><b>Terminal</b> — nicht neu gebaut</li>
+            <li><b>Easter Eggs</b> — keins umgesetzt</li>
+            <li><b>Drag & Drop</b> zwischen Apps — nicht umgesetzt</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8: AUSBLICK -->
+  <section class="slide" data-title="Ausblick">
+    <div class="slide-inner">
+      <div class="eyebrow"><span class="dot"></span>Danach</div>
+      <h2>Nächste Schritte</h2>
+      <ul class="roadmap">
+        <li><b>TERMINAL</b><span>Shell mit ls/cd/cat, Command-History — Spezifikation steht im Handbuch bereit</span></li>
+        <li><b>EASTER EGGS</b><span>Konami-Code-Retro-Modus und 10-Fenster-Achievement brauchen keine fehlende App</span></li>
+        <li><b>DRAG & DROP</b><span>Dateien vom Explorer in Notizen ziehen</span></li>
+        <li><b>SOUNDS</b><span>Boot, Klick, Fehler, Notification</span></li>
+      </ul>
+    </div>
+  </section>
+
+
+</div>
+
+<div class="nav">
+  <button id="prevBtn" aria-label="Vorherige Folie">←</button>
+  <div class="dots" id="dots"></div>
+  <span class="counter" id="counter">1 / 9</span>
+  <button id="nextBtn" aria-label="Nächste Folie">→</button>
+</div>
+
+<script>
+(function(){
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var dotsWrap = document.getElementById('dots');
+  var counter = document.getElementById('counter');
+  var idx = 0;
+
+  slides.forEach(function(_, i){
+    var d = document.createElement('span');
+    if (i === 0) d.classList.add('on');
+    d.addEventListener('click', function(){ go(i); });
+    dotsWrap.appendChild(d);
+  });
+  var dots = Array.prototype.slice.call(dotsWrap.children);
+
+  function go(n){
+    n = Math.max(0, Math.min(slides.length - 1, n));
+    slides[idx].classList.remove('active');
+    dots[idx].classList.remove('on');
+    idx = n;
+    slides[idx].classList.add('active');
+    dots[idx].classList.add('on');
+    counter.textContent = (idx + 1) + ' / ' + slides.length;
+    try { localStorage.setItem('cyberdesk_deck_slide', String(idx)); } catch (e) {}
+  }
+
+  document.getElementById('prevBtn').addEventListener('click', function(){ go(idx - 1); });
+  document.getElementById('nextBtn').addEventListener('click', function(){ go(idx + 1); });
+
+  window.addEventListener('keydown', function(e){
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { go(idx + 1); e.preventDefault(); }
+    if (e.key === 'ArrowLeft' || e.key === 'PageUp') { go(idx - 1); e.preventDefault(); }
+    if (e.key === 'Home') { go(0); }
+    if (e.key === 'End') { go(slides.length - 1); }
+  });
+
+  var startX = null;
+  window.addEventListener('touchstart', function(e){ startX = e.touches[0].clientX; });
+  window.addEventListener('touchend', function(e){
+    if (startX === null) return;
+    var dx = e.changedTouches[0].clientX - startX;
+    if (Math.abs(dx) > 60) go(idx + (dx < 0 ? 1 : -1));
+    startX = null;
+  });
+
+  try {
+    var saved = localStorage.getItem('cyberdesk_deck_slide');
+    if (saved !== null) go(parseInt(saved, 10) || 0);
+  } catch (e) {}
+
+  // App-Grid befüllen (echte Icon-Pfade aus assets/images/*.svg)
+  var ICONS = {
+    calculator: '<svg viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="1.75"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 15.75V18m-7.5-6.75h.008v.008H8.25v-.008Zm0 2.25h.008v.008H8.25v-.008Zm0 2.25h.008v.008H8.25v-.008Zm2.498-4.5h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008v-.008Zm2.504-4.5h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008v-.008Zm2.498-4.5h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008v-.008ZM8.25 6h7.5v2.25h-7.5V6ZM12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Z"/></svg>',
+    netrunner: '<svg viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="1.75"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253M3.284 14.253A8.959 8.959 0 0 1 3 12c0-1.016.132-2.003.383-2.942"/></svg>',
+    notes: '<svg viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="1.75"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"/></svg>',
+    file_explorer: '<svg viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="1.75"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12.75V12A2.25 2.25 0 0 1 4.5 9.75h15A2.25 2.25 0 0 1 21.75 12v.75m-8.69-6.44-2.12-2.12a1.5 1.5 0 0 0-1.061-.44H4.5A2.25 2.25 0 0 0 2.25 6v8.25A2.25 2.25 0 0 0 4.5 16.5h15A2.25 2.25 0 0 0 21.75 14.25V9A2.25 2.25 0 0 0 19.5 6.75h-6.879a1.5 1.5 0 0 1-1.06-.44Z"/></svg>',
+    settings: '<svg viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="1.75"><path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 0 1 0 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 0 1-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 0 1 0-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/></svg>'
+  };
+  var APPS = [
+    { key: 'calculator', name: 'Taschenrechner', desc: 'Standard + wissenschaftlicher Modus', status: 'ok', label: 'fertig' },
+    { key: 'netrunner', name: 'NetRunner', desc: 'Echter Browser (Chromium)', status: 'ok', label: 'fertig' },
+    { key: 'notes', name: 'Notizen', desc: 'Mehrere Notizen, Auto-Save 30s', status: 'ok', label: 'fertig' },
+    { key: 'file_explorer', name: 'Datei-Explorer', desc: 'Echtes VirtualFileSystem', status: 'warn', label: 'teilweise' },
+    { key: 'settings', name: 'Einstellungen', desc: 'Profil + Wallpaper', status: 'ok', label: 'fertig' }
+  ];
+  var grid = document.getElementById('app-grid');
+  APPS.forEach(function(app){
+    var card = document.createElement('div');
+    card.className = 'card app-card';
+    card.innerHTML =
+      '<div class="app-icon">' + ICONS[app.key] + '</div>' +
+      '<h3>' + app.name + '</h3>' +
+      '<p>' + app.desc + '</p>' +
+      '<span class="status ' + app.status + '">' + app.label + '</span>';
+    grid.appendChild(card);
+  });
+})();
+</script>
+</body>
+</html>

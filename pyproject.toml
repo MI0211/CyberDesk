@@ -1,0 +1,3 @@
+[tool.ruff]
+# Ignoriert die Warnung über unvollständig sortierte Imports im gesamten Projekt
+ignore = ["I001"]

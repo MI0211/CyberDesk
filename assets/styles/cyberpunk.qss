@@ -1,0 +1,919 @@
+/* ===================================================================
+   CYBERDESK OS - CORE STYLE SHEET (Figma Violet Palette)
+   =================================================================== */
+
+/* --- Globale / Grundlegende Elemente --- */
+QWidget {
+    background-color: #06060f;
+    color: rgba(255, 255, 255, 0.85);
+    font-family: "JetBrains Mono", "Segoe UI", sans-serif;
+    font-size: 11pt;
+}
+
+/* Grund-Buttons */
+QPushButton {
+    background-color: rgba(124, 58, 237, 0.15);
+    color: #a78bfa;
+    border: 1px solid rgba(139, 92, 246, 0.35);
+    border-radius: 6px;
+    padding: 6px 14px;
+}
+
+QPushButton:hover {
+    background-color: #7c3aed;
+    color: #ffffff;
+    border: 1px solid #7c3aed;
+}
+
+QPushButton:pressed {
+    background-color: #6d28d9;
+}
+
+/* Eingabefelder & Textfelder */
+QLineEdit, QPlainTextEdit, QTextEdit {
+    background-color: rgba(255, 255, 255, 0.04);
+    color: rgba(255, 255, 255, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    padding: 8px;
+    selection-background-color: rgba(124, 58, 237, 0.5);
+}
+
+QLineEdit:focus, QPlainTextEdit:focus, QTextEdit:focus {
+    border: 1px solid #7c3aed;
+    color: #ffffff;
+}
+
+/* --- Desktop --- */
+#CyberDesk {
+    background: qradialgradient(cx:0.22, cy:0.28, radius:1.0,
+        stop:0 #1c1440, stop:0.5 #0a0918, stop:1 #06060f);
+}
+
+/* --- Desktop Icons --- */
+#appIcon {
+    background-color: transparent;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    padding: 6px;
+    color: rgba(240, 235, 255, 0.92);
+    font-size: 11px;
+    font-weight: 600;
+}
+
+#appIcon:hover {
+    background-color: rgba(124, 58, 237, 0.12);
+    border: 1px solid rgba(139, 92, 246, 0.4);
+    color: #a78bfa;
+}
+
+/* --- Fenster-Grundgerüst --- */
+#AppContainer {
+    background-color: rgba(7, 7, 18, 0.94);
+    border: 1px solid rgba(139, 92, 246, 0.25);
+    border-radius: 12px;
+}
+
+#AppTitleBar {
+    background-color: rgba(139, 92, 246, 0.08);
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+#AppTitleIcon {
+    background: transparent;
+    border: none;
+}
+
+#AppTitleLabel {
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 13px;
+    font-weight: 500;
+    border: none;
+    background: transparent;
+}
+
+#AppContentWidget {
+    background: transparent;
+    border: none;
+}
+
+/* Fenster-Steuerungsbuttons */
+#WindowBtnMin {
+    background-color: rgba(251, 191, 36, 0.7);
+    border-radius: 6px;
+    border: none;
+}
+#WindowBtnMin:hover {
+    background-color: rgb(251, 191, 36);
+}
+
+#WindowBtnMax {
+    background-color: rgba(52, 211, 153, 0.7);
+    border-radius: 6px;
+    border: none;
+}
+#WindowBtnMax:hover {
+    background-color: rgb(52, 211, 153);
+}
+
+#WindowBtnClose {
+    background-color: rgba(248, 113, 113, 0.7);
+    border-radius: 6px;
+    border: none;
+}
+#WindowBtnClose:hover {
+    background-color: rgb(248, 113, 113);
+}
+
+/* --- Datei-Explorer --- */
+#explorerSidebar {
+    background-color: rgba(255, 255, 255, 0.02);
+    border-right: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+#explorerSidebarHeading {
+    color: rgba(255, 255, 255, 0.25);
+    font-size: 8pt;
+    font-weight: 600;
+    letter-spacing: 1px;
+    background: transparent;
+    border: none;
+    padding: 0 16px 8px 16px;
+}
+
+#explorerFolderList {
+    background: transparent;
+    border: none;
+    outline: none;
+    font-size: 9.5pt;
+}
+#explorerFolderList::item {
+    color: rgba(255, 255, 255, 0.55);
+    padding: 7px 16px;
+    border: none;
+}
+#explorerFolderList::item:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: rgba(255, 255, 255, 0.8);
+}
+#explorerFolderList::item:selected {
+    background-color: rgba(124, 58, 237, 0.15);
+    color: #a78bfa;
+    border-left: 2px solid #7c3aed;
+}
+
+#explorerMainArea {
+    background: transparent;
+}
+
+#explorerToolbar {
+    background: transparent;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+#explorerPathLabel {
+    color: rgba(255, 255, 255, 0.3);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9pt;
+    letter-spacing: 0.5px;
+    background: transparent;
+    border: none;
+}
+
+#explorerUpBtn {
+    background-color: transparent;
+    color: rgba(255, 255, 255, 0.55);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-size: 9pt;
+}
+#explorerUpBtn:hover {
+    background-color: rgba(255, 255, 255, 0.06);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+}
+#explorerUpBtn:disabled {
+    color: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+#explorerNewBtn {
+    background-color: rgba(124, 58, 237, 0.15);
+    color: #a78bfa;
+    border: 1px solid rgba(139, 92, 246, 0.35);
+    border-radius: 6px;
+    padding: 4px 12px;
+    font-size: 9pt;
+}
+#explorerNewBtn:hover {
+    background-color: #7c3aed;
+    color: #ffffff;
+    border: 1px solid #7c3aed;
+}
+
+#explorerDeleteBtn {
+    background-color: transparent;
+    color: rgba(248, 113, 113, 0.7);
+    border: 1px solid rgba(248, 113, 113, 0.3);
+    border-radius: 6px;
+    padding: 4px 12px;
+    font-size: 9pt;
+}
+#explorerDeleteBtn:hover {
+    background-color: rgba(248, 113, 113, 0.12);
+    color: rgb(248, 113, 113);
+    border: 1px solid rgba(248, 113, 113, 0.6);
+}
+
+#explorerTable {
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.75);
+    font-size: 9.5pt;
+    gridline-color: transparent;
+    /* Setzt die echte Palette-Highlight-Farbe — sonst fällt Qt beim Sortieren
+       (current+selected Zustand kombiniert) auf sein blaues Standard-Highlight
+       zurück, das ::item:selected allein nicht immer zuverlässig überschreibt. */
+    selection-background-color: #7c3aed;
+    selection-color: #ffffff;
+}
+#explorerTable::item {
+    padding: 6px 8px;
+    border: none;
+}
+#explorerTable::item:selected {
+    background-color: rgba(124, 58, 237, 0.18);
+    color: #ffffff;
+}
+#explorerTable QHeaderView::section {
+    background-color: transparent;
+    color: rgba(255, 255, 255, 0.3);
+    font-size: 8pt;
+    font-weight: 600;
+    letter-spacing: 1px;
+    border: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    padding: 6px 8px;
+}
+
+#explorerStatusLabel {
+    color: rgba(255, 255, 255, 0.2);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 8pt;
+    background: transparent;
+    border: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 6px 14px;
+}
+
+/* --- Einstellungen --- */
+#settingsSectionLabel {
+    color: rgba(255, 255, 255, 0.3);
+    font-size: 8pt;
+    font-weight: 600;
+    letter-spacing: 1px;
+    background: transparent;
+    border: none;
+}
+
+#settingsAvatarPreview {
+    background-color: rgba(124, 58, 237, 0.2);
+    border: 2px solid #a78bfa;
+    border-radius: 32px;
+    color: #a78bfa;
+    font-size: 18pt;
+    font-weight: 700;
+}
+
+#settingsChooseAvatarBtn {
+    background-color: rgba(124, 58, 237, 0.15);
+    color: #a78bfa;
+    border: 1px solid rgba(139, 92, 246, 0.35);
+    border-radius: 6px;
+    padding: 6px 14px;
+    font-size: 9pt;
+}
+#settingsChooseAvatarBtn:hover {
+    background-color: #7c3aed;
+    color: #ffffff;
+    border: 1px solid #7c3aed;
+}
+
+#settingsFieldLabel {
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 8.5pt;
+    letter-spacing: 0.5px;
+    background: transparent;
+    border: none;
+}
+
+#settingsNameInput {
+    background-color: rgba(255, 255, 255, 0.04);
+    color: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 8px 10px;
+    font-size: 10pt;
+}
+#settingsNameInput:focus {
+    border: 1px solid #7c3aed;
+}
+
+#settingsSaveBtn {
+    background-color: #7c3aed;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    padding: 9px;
+    font-size: 10pt;
+    font-weight: 600;
+}
+#settingsSaveBtn:hover {
+    background-color: #8b5cf6;
+}
+#settingsSaveBtn:pressed {
+    background-color: #6d28d9;
+}
+
+#settingsStatusLabel {
+    color: rgba(52, 211, 153, 0.85);
+    font-size: 8.5pt;
+    background: transparent;
+    border: none;
+}
+
+#settingsWallpaperThumb {
+    background-color: rgba(255, 255, 255, 0.04);
+    border: 2px solid rgba(139, 92, 246, 0.2);
+    border-radius: 8px;
+    padding: 4px;
+}
+#settingsWallpaperThumb:hover {
+    border: 2px solid rgba(139, 92, 246, 0.5);
+}
+#settingsWallpaperThumb:checked {
+    border: 2px solid #8b5cf6;
+    background-color: rgba(124, 58, 237, 0.18);
+}
+
+/* --- Notizen --- */
+#notesSidebar {
+    background-color: rgba(255, 255, 255, 0.02);
+    border-right: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+#notesEditorArea {
+    background: transparent;
+}
+
+#notesNewBtn {
+    background-color: rgba(124, 58, 237, 0.15);
+    color: #a78bfa;
+    border: 1px solid rgba(139, 92, 246, 0.35);
+    border-radius: 6px;
+    padding: 6px 10px;
+    font-size: 9pt;
+    font-weight: 600;
+}
+#notesNewBtn:hover {
+    background-color: #7c3aed;
+    color: #ffffff;
+    border: 1px solid #7c3aed;
+}
+
+#notesList {
+    background: transparent;
+    border: none;
+    outline: none;
+    font-size: 9.5pt;
+}
+#notesList::item {
+    color: rgba(255, 255, 255, 0.55);
+    padding: 8px 10px;
+    border-radius: 6px;
+}
+#notesList::item:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: rgba(255, 255, 255, 0.8);
+}
+#notesList::item:selected {
+    background-color: rgba(124, 58, 237, 0.18);
+    color: #ffffff;
+}
+
+#notesDeleteBtn {
+    background-color: transparent;
+    color: rgba(248, 113, 113, 0.7);
+    border: 1px solid rgba(248, 113, 113, 0.3);
+    border-radius: 6px;
+    padding: 4px 14px;
+    font-size: 9pt;
+}
+#notesDeleteBtn:hover {
+    background-color: rgba(248, 113, 113, 0.12);
+    color: rgb(248, 113, 113);
+    border: 1px solid rgba(248, 113, 113, 0.6);
+}
+
+#notesStatusLabel {
+    color: rgba(255, 255, 255, 0.35);
+    font-size: 9pt;
+    letter-spacing: 0.5px;
+    background: transparent;
+    border: none;
+}
+
+#notesSaveBtn {
+    background-color: rgba(124, 58, 237, 0.18);
+    color: #a78bfa;
+    border: 1px solid rgba(139, 92, 246, 0.35);
+    border-radius: 6px;
+    padding: 4px 14px;
+    font-size: 9pt;
+}
+#notesSaveBtn:hover {
+    background-color: #7c3aed;
+    color: #ffffff;
+    border: 1px solid #7c3aed;
+}
+
+#notesEditor {
+    background-color: rgba(255, 255, 255, 0.03);
+    color: rgba(255, 255, 255, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    padding: 10px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10pt;
+    selection-background-color: rgba(124, 58, 237, 0.5);
+}
+#notesEditor:focus {
+    border: 1px solid #7c3aed;
+}
+
+/* --- NetRunner: Adressleiste --- */
+#NetNavBar {
+    background: transparent;
+}
+
+#NetNavIconButton {
+    background-color: transparent;
+    color: rgba(255, 255, 255, 0.35);
+    border: none;
+    border-radius: 6px;
+    padding: 2px 8px;
+    font-size: 11pt;
+}
+#NetNavIconButton:hover {
+    background-color: rgba(255, 255, 255, 0.06);
+    color: rgba(255, 255, 255, 0.75);
+    border: none;
+}
+
+#NetUrlBar {
+    background-color: rgba(255, 255, 255, 0.04);
+    color: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 7px;
+    padding: 5px 12px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9.5pt;
+}
+#NetUrlBar:focus {
+    border: 1px solid #7c3aed;
+    color: #ffffff;
+}
+
+#NetConnectButton {
+    background-color: rgba(124, 58, 237, 0.18);
+    color: #a78bfa;
+    border: 1px solid rgba(139, 92, 246, 0.35);
+    border-radius: 7px;
+    padding: 5px 16px;
+    font-size: 9.5pt;
+    font-weight: 600;
+}
+#NetConnectButton:hover {
+    background-color: #7c3aed;
+    color: #ffffff;
+    border: 1px solid #7c3aed;
+}
+#NetConnectButton:pressed {
+    background-color: #6d28d9;
+}
+
+#NetBrowserView {
+    border: 1px solid rgba(139, 92, 246, 0.2);
+}
+
+/* --- Taskbar --- */
+#Taskbar {
+    background-color: rgba(6, 6, 16, 0.94);
+    border-top: 1px solid rgba(139, 92, 246, 0.15);
+}
+
+#TaskbarClock {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 10pt;
+    border: none;
+    background: transparent;
+    border-radius: 6px;
+    padding: 4px 8px;
+}
+#TaskbarClock:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.85);
+}
+
+/* --- Mini-Kalender-Popup --- */
+#CalendarPopup {
+    background-color: #0d0d1a;
+    border: 1px solid rgba(139, 92, 246, 0.35);
+    border-radius: 10px;
+}
+
+#CalendarWidget {
+    background-color: transparent;
+    border: none;
+}
+#CalendarWidget QToolButton {
+    color: rgba(255, 255, 255, 0.85);
+    background-color: transparent;
+    border: none;
+    border-radius: 6px;
+    padding: 4px 8px;
+    font-weight: 600;
+}
+#CalendarWidget QToolButton:hover {
+    background-color: rgba(124, 58, 237, 0.2);
+}
+#CalendarWidget QAbstractItemView {
+    background-color: #0d0d1a;
+    color: rgba(255, 255, 255, 0.8);
+    selection-background-color: #7c3aed;
+    selection-color: #ffffff;
+    outline: none;
+}
+#CalendarWidget QWidget#qt_calendar_navigationbar {
+    background-color: transparent;
+}
+#CalendarWidget QHeaderView {
+    background-color: transparent;
+}
+#CalendarWidget QHeaderView::section {
+    background-color: #0d0d1a;
+    border: none;
+    padding: 4px 0;
+}
+
+#TaskbarMenuButton {
+    background-color: transparent;
+    color: rgba(255, 255, 255, 0.85);
+    border: none;
+    border-radius: 6px;
+    padding: 6px 14px;
+    font-size: 9.5pt;
+    font-weight: 600;
+}
+#TaskbarMenuButton:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+    color: #ffffff;
+}
+
+/* Einzelner App-Eintrag in der Taskbar */
+/* Flach und ruhig, verschmilzt mit der Taskbar (wie der MENÜ-Button) — keine
+   Dauer-Füllung, nur ein dezenter Hover und ein dünner Indikator für "läuft". */
+#TaskbarAppButton {
+    background-color: transparent;
+    border: none;
+    border-radius: 6px;
+}
+#TaskbarAppButton:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+}
+/* Läuft (offen oder minimiert): nur ein dünner Unterstrich, keine Füllung */
+#TaskbarAppButton[running="true"] {
+    background-color: transparent;
+    border-bottom: 2px solid #a78bfa;
+}
+/* Nur angeheftet, aktuell nicht gestartet: keine Box, nur schwächeres Icon */
+#TaskbarAppButton[running="false"] {
+    background-color: transparent;
+    border: none;
+}
+
+/* Kontextmenüs der Taskbar (Startmenü + Rechtsklick-Menü) */
+QMenu#TaskbarMenu {
+    background-color: #0d0d1a;
+    border: 1px solid rgba(139, 92, 246, 0.35);
+    border-radius: 8px;
+    padding: 6px;
+}
+QMenu#TaskbarMenu::item {
+    padding: 6px 20px;
+    border-radius: 6px;
+    color: rgba(255, 255, 255, 0.8);
+}
+QMenu#TaskbarMenu::item:selected {
+    background-color: #7c3aed;
+    color: #ffffff;
+}
+
+#DesktopRefreshToast {
+    background-color: rgba(13, 13, 26, 0.92);
+    border: 1px solid rgba(139, 92, 246, 0.4);
+    border-radius: 8px;
+    padding: 8px 18px;
+    color: #ffffff;
+    font-size: 9.5pt;
+    font-weight: 600;
+}
+QMenu#TaskbarMenu::item:disabled {
+    color: rgba(255, 255, 255, 0.25);
+}
+
+/* --- Startmenü --- */
+#StartMenu {
+    background-color: #0d0d1a;
+    border: 1px solid rgba(139, 92, 246, 0.35);
+    border-radius: 10px;
+}
+
+#StartMenuUserCard {
+    background: transparent;
+}
+#StartMenuUserCard:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+#StartMenuAvatar {
+    background-color: rgba(124, 58, 237, 0.25);
+    border: 2px solid #a78bfa;
+    border-radius: 18px;
+    color: #a78bfa;
+    font-weight: 700;
+    font-size: 11pt;
+}
+
+#StartMenuUserName {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 10.5pt;
+    font-weight: 600;
+    background: transparent;
+    border: none;
+}
+
+#StartMenuDivider {
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+#StartMenuSectionLabel {
+    color: rgba(255, 255, 255, 0.3);
+    font-size: 8pt;
+    font-weight: 600;
+    letter-spacing: 1px;
+    background: transparent;
+    border: none;
+    padding: 10px 16px 4px 16px;
+}
+
+#StartMenuEmptyLabel {
+    color: rgba(255, 255, 255, 0.3);
+    font-size: 9pt;
+    background: transparent;
+    border: none;
+    padding: 6px 16px 12px 16px;
+}
+
+#StartMenuAppRow {
+    background-color: transparent;
+    color: rgba(255, 255, 255, 0.8);
+    border: none;
+    text-align: left;
+    padding: 9px 16px;
+    font-size: 10pt;
+}
+#StartMenuAppRow:hover {
+    background-color: rgba(124, 58, 237, 0.18);
+    color: #ffffff;
+}
+
+#StartMenuLogoutRow {
+    background-color: transparent;
+    color: rgba(248, 113, 113, 0.75);
+    border: none;
+    text-align: left;
+    padding: 10px 16px;
+    font-size: 10pt;
+    font-weight: 600;
+}
+#StartMenuLogoutRow:hover {
+    background-color: rgba(248, 113, 113, 0.12);
+    color: rgb(248, 113, 113);
+}
+
+#StartMenuQuitRow {
+    background-color: transparent;
+    color: rgba(255, 255, 255, 0.35);
+    border: none;
+    text-align: left;
+    padding: 8px 16px 12px 16px;
+    font-size: 9pt;
+}
+#StartMenuQuitRow:hover {
+    background-color: rgba(255, 255, 255, 0.06);
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* --- Login-Bildschirm --- */
+#AuthScreen {
+    background-color: #07070f;
+}
+
+#AuthBrandPanel {
+    background: qradialgradient(cx:0.25, cy:0.35, radius:1.0,
+        stop:0 #1c1440, stop:0.5 #0b0a1c, stop:1 #07070f);
+}
+
+#AuthFormPanel {
+    background-color: #07070f;
+}
+
+#AuthDivider {
+    background-color: rgba(255, 255, 255, 0.06);
+}
+
+#AuthBrandRow, #AuthCard, #AuthSwitchRow {
+    background: transparent;
+}
+
+#AuthTabSwitcher {
+    background-color: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 10px;
+}
+
+#AuthTabHighlight {
+    background-color: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 7px;
+}
+
+#AuthTabButton {
+    /* Textfarbe wird von _HoverFadeButton in Python animiert (siehe auth_screen.py) */
+    background-color: transparent;
+    border: none;
+    border-radius: 7px;
+    padding: 6px 0;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 8.5pt;
+    letter-spacing: 1px;
+}
+
+#AuthSwitchLabel {
+    color: rgba(255, 255, 255, 0.3);
+    font-size: 9pt;
+    border: none;
+    background: transparent;
+}
+
+#AuthSwitchButton {
+    background: transparent;
+    border: none;
+    color: rgba(167, 139, 250, 0.85);
+    font-size: 9pt;
+    padding: 0;
+}
+#AuthSwitchButton:hover {
+    color: #a78bfa;
+    text-decoration: underline;
+}
+
+#AuthLogoMark {
+    background-color: rgba(124, 58, 237, 0.2);
+    border: 1px solid rgba(139, 92, 246, 0.35);
+    border-radius: 8px;
+}
+
+#AuthLogoDot {
+    background-color: #a78bfa;
+    border-radius: 2px;
+    border: none;
+}
+
+#AuthBrand {
+    color: rgba(255, 255, 255, 0.92);
+    font-size: 15pt;
+    font-weight: 600;
+    border: none;
+    background: transparent;
+}
+
+#AuthEyebrow {
+    color: rgba(167, 139, 250, 0.75);
+    font-size: 9pt;
+    letter-spacing: 2px;
+    border: none;
+    background: transparent;
+}
+
+#AuthHeadline {
+    color: #ffffff;
+    font-size: 26pt;
+    font-weight: 700;
+    border: none;
+    background: transparent;
+}
+
+#AuthHeadlineGradient {
+    /* Textfarbe wird als Verlauf in _GradientLabel.paintEvent gemalt */
+    font-size: 26pt;
+    font-weight: 700;
+    border: none;
+    background: transparent;
+}
+
+#AuthBrandSub {
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 10.5pt;
+    border: none;
+    background: transparent;
+}
+
+#AuthTitle {
+    color: #ffffff;
+    font-size: 18pt;
+    font-weight: 700;
+    border: none;
+    background: transparent;
+}
+
+#AuthSubtitle {
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 10pt;
+    border: none;
+    background: transparent;
+}
+
+#AuthInput {
+    background-color: rgba(255, 255, 255, 0.04);
+    color: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-size: 11pt;
+}
+#AuthInput:hover {
+    border: 1px solid rgba(255, 255, 255, 0.16);
+}
+#AuthInput:focus {
+    border: 1px solid #7c3aed;
+}
+
+#AuthError {
+    color: #f87171;
+    font-size: 9pt;
+    border: none;
+    background: transparent;
+}
+
+#AuthSubmitButton {
+    background-color: #7c3aed;
+    color: #ffffff;
+    border: none;
+    border-radius: 10px;
+    padding: 12px;
+    font-size: 11pt;
+    font-weight: 600;
+}
+#AuthSubmitButton:hover {
+    background-color: #8b5cf6;
+    border: none;
+}
+#AuthSubmitButton:pressed {
+    background-color: #6d28d9;
+}
+
+#AuthPresentationLink {
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 9pt;
+    border: none;
+    background: transparent;
+}
+
+#AuthQuitButton {
+    background-color: transparent;
+    color: rgba(255, 255, 255, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    padding: 5px 12px;
+    font-size: 9pt;
+}
+#AuthQuitButton:hover {
+    background-color: rgba(248, 113, 113, 0.08);
+    color: rgba(248, 113, 113, 0.75);
+    border: 1px solid rgba(248, 113, 113, 0.25);
+}
